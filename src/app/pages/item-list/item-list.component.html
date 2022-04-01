@@ -1,0 +1,27 @@
+<div class="content">
+    <h1>List <span>{{_ITEM.item}}</span></h1>
+    <ul>
+        <li class="list-item" 
+        *ngFor="let item of itemList" 
+        [ngClass]="(current_item==item?._id) ? 'active' : 'unactive'"
+        (click)="onclick(item._id)">
+        
+            <span>{{item.name}}</span>
+
+            
+            <ul 
+            class="child-list"
+            *ngIf="current_item===item?._id">
+                {{output(item)}}
+                <!-- Workouts -->
+                <li *ngFor="let section of item?.sections">{{section.name}}</li>
+
+                <!-- Movement Patterns -->
+                <li *ngFor="let variation of item?.variations">{{variation.key}}: {{variation.value.name}}</li>
+
+                <!-- Exercise -->
+
+            </ul>
+        </li>
+    </ul>
+</div>

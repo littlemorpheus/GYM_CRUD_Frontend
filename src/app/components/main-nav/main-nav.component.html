@@ -1,0 +1,30 @@
+<nav class="wrapper">
+    <div class="content">
+        <div class="modal-box" (click)="onUserClick()">
+            <i class="gg-user"></i>
+        </div>
+
+        <div class="user-txt">Guest</div>
+        
+        <div class="link-box">
+            <a routerLink="/workout" routerLinkActive = active-link [ngClass]="workoutDisabled ? 'disabled' : ''">
+                <i class="gg-stopwatch"></i>
+            </a>
+        </div>
+        <div class="link-box">
+            <a routerLink="/list/exercise" routerLinkActive = active-link [ngClass]="listDisabled ? 'disabled' : ''">
+                <i class="gg-gym"></i>
+            </a>
+        </div>
+        <div class="link-box">
+            <a routerLink="/list/movement-pattern" routerLinkActive = active-link [ngClass]="listDisabled ? 'disabled' : ''">
+                <i class="gg-user custom"><i class="gg-gym custom"></i></i>
+            </a>
+        </div>
+        <div class="link-box">
+            <a routerLink="/list/workout" routerLinkActive = active-lin [ngClass]="listDisabled ? 'disabled' : ''">
+                <i class="gg-clipboard"></i>
+            </a>
+        </div>
+    </div>
+</nav>

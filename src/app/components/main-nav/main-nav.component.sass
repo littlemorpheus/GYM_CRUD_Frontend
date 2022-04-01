@@ -1,0 +1,88 @@
+@import '../../../sass/_variables'
+    
+$icon-size: 40px
+
+div
+    display: flex
+    
+nav
+    background-color: $brand-dark
+
+    display: flex
+    flex-direction: row
+    margin: auto
+    
+    height: 70px
+    width: 90vw
+    margin-bottom: 5vw
+    border-radius: 8px
+    z-index: 10
+
+    .content
+        margin: auto
+
+    .user-txt
+        color: white
+        font-size: 24px
+
+        width: 100px
+        margin: auto
+        padding: 0 10px
+
+    .modal-box
+        display: inline-flex
+
+        background-color: $brand-white
+        width: $icon-size
+        height: $icon-size
+        border-radius: 50%
+
+        margin: auto 2px
+
+        padding: auto
+        justify-content: center
+        align-content: center
+
+        i
+            margin: auto
+            color: $brand-black
+            --ggs: 1.2
+
+
+    .link-box
+        display: inline-block
+        float: right 
+        width: $icon-size
+        height: $icon-size
+        border-radius: 5px
+        overflow: hidden
+
+        margin: auto 3px
+
+        a
+            display: flex
+            width:100%
+            height:100%
+            background-color: $brand-mild
+
+            padding: auto
+            justify-content: center
+            align-content: center
+
+            &.disabled
+                display: none
+
+            &.active-link
+                background-color: $brand-light
+            
+            i
+                color: $brand-black
+                margin: auto
+                --ggs: 1.2
+
+            .custom
+                &.gg-gym
+                    transform: translate(10px, 8px)
+                    --ggs: 0.6
+                &.gg-user
+                    transform: translateX(-6px)

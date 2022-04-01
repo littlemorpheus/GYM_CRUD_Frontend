@@ -3,6 +3,13 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+
+    "paths": {
+      "services/*": ["src/app/services/*"],
+      "sass/*": ["src/sass/*"],
+      "einviorments": ["src/einviroments"]  
+    },
+    
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,

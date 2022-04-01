@@ -1,0 +1,86 @@
+<div class="content">
+    <!--Title-->
+    <h1 
+    class="page-title"
+    *ngIf="status!==EXERCISE_STATUS">Choose a 
+    <span 
+    *ngIf="status===WORKOUT_STATUS || status===INITIAL_STATUS"
+    [ngClass]="title_class" 
+    (click) = "onTitleClick()" >Workout</span>
+    <span 
+    *ngIf="status===MOVEMENT_PATTERN_STATUS"
+    class="active" >Movement Pattern</span>
+    </h1>
+
+    <!--Options (Maybe seprate component)-->
+    <ul class="parent-list">
+        <!--3 Kinds of list-item-->
+
+        <!--Workout-->
+        <div
+        *ngIf="status===WORKOUT_STATUS"
+        class="workout-list main-list">
+            <li class="list-item" 
+            *ngFor="let item of itemList" 
+            [ngClass]="(current_item==item?._id) ? 'active' : 'unactive'">
+
+                <span (click)="onWorkoutClick(item?._id)">{{item.name}}</span>
+
+                <ul 
+                class="child-list"
+                *ngIf="current_item===item?._id">
+                    <li *ngFor="let section of item?.sections">{{section.name}}</li>
+                </ul>
+
+                <div 
+                class="btn-container"
+                *ngIf="current_item===item?._id">
+                    <button (click)="onWorkoutSelection()">DIS ONE</button>
+                </div>
+
+            </li>
+        </div>
+        
+
+        <!--Movement Pattern-->
+        <!--Exercise-->
+        <div
+        *ngIf="status===MOVEMENT_PATTERN_STATUS || status===EXERCISE_STATUS"
+        class="movement-pattern-list main-list">
+            <!--IF current item (&& Exercise) OR Movement Pattern-->
+            <li class="list-item" 
+            *ngFor="let item of itemList" 
+            [ngClass]="(current_item==item._id) ? 'active' : 'unactive'"
+            [style.display]="(status===EXERCISE_STATUS && current_item!==item._id) ? 'none' : 'block'"
+            (click)="onMovementPatternClick(item._id)">
+                <span>{{item.name}}</span>
+
+                <ul 
+                class="child-list"
+                *ngIf="current_item===item?._id">
+                    <li 
+                    *ngFor="let map of item?.variations"
+                    (click)="onExerciseClick(item._id)">{{map.key}}: {{map.value.name}}</li>
+                </ul>
+
+            </li>
+        </div>
+    </ul>
+
+    <!--Exercise Entry Form-->
+    <div 
+    class="exercise-entry"
+    *ngIf="status===EXERCISE_STATUS">
+        <h1 class="entry-heading">Level Three</h1>
+        <h3 class="entry-heading">Bar Dips</h3>
+        <form  [formGroup]="form" (ngSubmit)="addSet($event)">
+            <div class="rep-count-container"><h1 class="rep-count">{{rep_count}}</h1></div>
+            <h3 class="rep-count-txt">Out of <span class="rep-goal">70</span></h3>
+            <div class="rep-input">
+                <button class="add-btn">＋</button>
+                <input formControlName="reps" type="number" name="reps" />
+            </div>
+        </form>
+    </div>
+
+</div>

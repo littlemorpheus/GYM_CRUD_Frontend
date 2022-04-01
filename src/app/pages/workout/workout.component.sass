@@ -1,0 +1,126 @@
+@import '../../../sass/variables'
+@import '../../../sass/mixins'
+    
+:host
+    display: flex
+    width: 100%
+    height: 170vh
+    background-color: rgba($brand-mild, 0.4)
+
+    align-content: center
+    justify-content: center
+
+.content
+    height: 100vh
+    width: 80vw
+    margin: 0
+    padding: auto
+    
+
+    display: flex
+    flex-direction: column
+
+//HEADING
+.page-title
+    color: $brand-dark
+    +stroke(1px, $brand-black)
+
+    font-size: 4rem
+    span
+        color: $brand-white
+    .active
+        color: $brand-light
+    .unactive
+        margin: auto
+        color: $brand-mild
+
+//ITEM LIST
+div
+    flex-direction: column
+ul 
+    width: 100%
+    //border: 1px solid red
+
+    list-style: none
+
+    .main-list li 
+        //border: 1px solid green
+        //height: 40px
+        margin: 10px 0
+        padding: 5px 0
+       
+        background-color: $brand-mild
+        overflow: hidden
+        //text-shadow: -2px -2px rgba($brand-mild, 0.5)
+        box-shadow: 2px 2px rgba($brand-dark, 0.5)
+        border: 1px solid $brand-black
+        transition: 0.5s
+
+        cursor: pointer
+        //&.active
+
+        //&.unactive
+       
+        span
+           color: $brand-white
+           font-size: 20px
+    
+    .child-list li
+        border: none
+        box-shadow: none
+
+.btn-container
+    width: 100%
+    margin: 10px 0
+    button
+        width: 50%
+        background-color: $brand-dark
+        border: none
+        border-radius: 26px
+
+        box-shadow: 0 6px 10px $brand-black
+        transition: 0.5s
+
+        &:active
+            transition: translateX(-5px)
+            box-shadow: 0 1px 10px $brand-black
+
+//Exercise Form
+.exercise-entry
+    .entry-heading
+        color: $brand-white
+        +stroke(1px, $brand-black)
+
+    h1.entry-heading
+        text-decoration: underline $brand-white
+    
+    .rep-count-container
+        height: 10rem
+        overflow: none
+    .rep-count
+        font-size: 10rem
+        color: $brand-light
+        text-shadow: 0 3px 2px $brand-black
+    .rep-count-txt
+        color: $brand-mild
+        +stroke(1px, $brand-black)
+        .rep-goal
+            color: $brand-light
+
+    .rep-input
+        input
+            background-color: rgba(0, 0, 0, 0)
+            color: $brand-light
+            border: none
+            border-bottom: 2px solid $brand-mild
+            font-size: 2.5rem
+            width: 30%
+
+        button
+            border: 1px solid $brand-dark
+            color: $brand-dark
+            background-color: $brand-mild
+            border-radius: 50%
+            width: 28px
+            height: 28px
+
