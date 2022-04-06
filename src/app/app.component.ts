@@ -14,6 +14,11 @@ export class AppComponent {
     private modalService: NgbModal
     ) { }
 
+  ngOnInit(): void {
+    var id = localStorage.getItem("SESSIONID")
+    /* Check If Expired */
+  }
+
   open(content: any) {
     this.modalService.open(content, {windowClass: 'dark-modal' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;

@@ -4,7 +4,9 @@
             <i class="gg-user"></i>
         </div>
 
-        <div class="user-txt">Guest</div>
+        <div class="user-txt">{{name}}</div>
+        <!--Constrain to 8 letter nickname max-->
+        
         
         <div class="link-box">
             <a routerLink="/workout" routerLinkActive = active-link [ngClass]="workoutDisabled ? 'disabled' : ''">
@@ -22,7 +24,7 @@
             </a>
         </div>
         <div class="link-box">
-            <a routerLink="/list/workout" routerLinkActive = active-lin [ngClass]="listDisabled ? 'disabled' : ''">
+            <a routerLink="/list/workout" routerLinkActive = active-link [ngClass]="listDisabled ? 'disabled' : ''">
                 <i class="gg-clipboard"></i>
             </a>
         </div>

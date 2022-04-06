@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -9,6 +9,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ItemListComponent } from './pages/item-list/item-list.component';
 import { MainNavComponent } from './components/main-nav/main-nav.component';
 import { WorkoutComponent } from './pages/workout/workout.component';
+import { UserModalComponent } from './components/user-modal/user-modal.component';
+import { AuthInterceptor } from 'services/auth.interceptor';
 
 
 @NgModule({
@@ -16,7 +18,8 @@ import { WorkoutComponent } from './pages/workout/workout.component';
     AppComponent,
     ItemListComponent,
     MainNavComponent,
-    WorkoutComponent
+    WorkoutComponent,
+    UserModalComponent
   ],
   imports: [
     BrowserModule,
@@ -26,7 +29,13 @@ import { WorkoutComponent } from './pages/workout/workout.component';
     FormsModule,
     NgbModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

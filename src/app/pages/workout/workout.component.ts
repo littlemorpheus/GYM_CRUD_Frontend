@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ItemPostService } from 'services/item-post.service';
 import { ItemRetrievalService } from 'services/item-retrieval.service';
+import { WorkoutEntry, doneMovementPattern, doneSets } from 'services/workout-entry';
 
 @Component({
   selector: 'app-workout',
@@ -14,6 +16,7 @@ export class WorkoutComponent implements OnInit {
   WORKOUT_STATUS = 0;
   MOVEMENT_PATTERN_STATUS = 1;
   EXERCISE_STATUS = 2;
+  CONFIRM_STATUS = 5;
 
   /*        VARIABLES        */
     //Top Level
@@ -24,17 +27,29 @@ export class WorkoutComponent implements OnInit {
     //Item Listings
   itemList: any[] = [];
   current_item: string = '';
+  current_exercise: any;
   workout: any;
     workout_id: string = '';
     movement_pattern_id: string = '';
     //Exercise
       rep_count: number = 0;
+      MIN_REPS: number = 50;/* Not sure what to do with this*/
       form: FormGroup = this.fb.group({
         reps: ["", Validators.required]
       })
-
+    //Record Keeping
+    setCount: number;
+    setList: doneSets[] = [];
+    workoutEntryObj: WorkoutEntry = {
+      workout_plan: '',
+      sections: [],
+      notes: '',
+      user_id: ''
+    }
+    
   constructor(
     private retrieval: ItemRetrievalService,
+    private post: ItemPostService,
     private fb: FormBuilder
   ) { }
 
@@ -116,8 +131,13 @@ export class WorkoutComponent implements OnInit {
     so when clicked again makes current item nothing 
     removing all options. This is an ERROR  */
   }
-  onExerciseClick(item: string) {
-    this.status = this.EXERCISE_STATUS
+  onExerciseClick(item: any) {
+    //Movement Pattern Locked In
+    this._lockInMovementPattern();
+    var current_exercise = Object.assign({}, item, item?.value);
+    delete current_exercise.value
+    this.current_exercise = current_exercise;
+    console.log(current_exercise)
   }
 
 
@@ -134,12 +154,17 @@ export class WorkoutComponent implements OnInit {
         this.workout = val 
         console.log(val)
 
+        this.workoutEntryObj.workout_plan = this.current_item;
         this.current_item = '';
         this.itemList = val?.sections;
-        console.log(this.itemList)
         this.status = this.MOVEMENT_PATTERN_STATUS;
       }
     )
+  }
+  _lockInMovementPattern() {
+    //because doneMovementPattern is an array best to do a push all in one
+    this.setCount = 0;
+    this.status = this.EXERCISE_STATUS
   }
 
   /*            Choosing Movement Pattern            */
@@ -147,9 +172,47 @@ export class WorkoutComponent implements OnInit {
   /*            Choosing Exercise            */
   addSet(event: any) {
     var reps = parseInt(event.target?.reps.value)
+
+    if (!this.current_exercise) return false
     if (!reps) return false
     if (reps < 1 || (this.rep_count + reps) > 1000) return false
+    
     this.rep_count += reps;
-    return false
+    this.setCount += 1;
+
+    this.setList.push({
+      exercise: this.current_exercise._id,
+      set_index: this.setCount,
+      reps: reps
+    })
+    return true
+  }
+  completeMovementPattern() {
+    /* RECORD Movement Pattern */
+    let doneMV: doneMovementPattern = {
+      workout_section: this.current_item,
+      sets: this.setList
+    }
+    this.workoutEntryObj.sections.push(doneMV)
+    this.setList = [];
+
+    /* Unlock Movement Pattern */
+    this.rep_count = 0;
+    this.status = this.MOVEMENT_PATTERN_STATUS
+
+    /* Remove from List of Movement Patterns on Wokrout Object */
+    console.log(this.current_item)
+    console.log(this.itemList)
+    var result = this.itemList.filter(item => item._id != this.current_item)
+    this.itemList = result
+
+    /* Check to see if done all Movement Pattrens */
+    if (this.itemList.length < 1) this.status = this.CONFIRM_STATUS;
+  }
+  completeWorkout() {
+    /* CONFIRM_STATUS */
+    this.post.addEntry(this.workoutEntryObj).subscribe(console.log)
+    this.status = this.INITIAL_STATUS
+    console.log(this.workoutEntryObj);
   }
 }

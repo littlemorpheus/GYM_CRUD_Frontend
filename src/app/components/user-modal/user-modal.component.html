@@ -1,0 +1,72 @@
+<ng-template #login let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Log In</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div 
+    class="modal-body"
+    *ngIf="myForm">
+        <form [formGroup]="myForm">
+            Value: {{ myForm.value | json }}
+
+            <!--Username-->
+            <div class="mb-3">
+                <div class="input-group">
+                    <input 
+                    class="form-control" 
+                    placeholder="Username"
+                    formControlName="username"
+                    type="text">
+                </div>
+                <p class="err-msg" *ngIf="username?.invalid && username?.touched">Username Required</p>
+            </div>
+
+            <!--Password-->
+            <div class="mb-3">
+                <div class="input-group">
+                    <input 
+                    class="form-control" 
+                    placeholder="Password"
+                    formControlName="password"
+                    type="password">
+                </div>
+                <p class="err-msg" *ngIf="password?.invalid && password?.touched">Password Required</p>
+            </div>
+            <p 
+            class="err-msg"
+            *ngIf="err_msg">{{err_msg}}</p>
+
+        </form>-->
+    </div>
+    <div class="modal-footer">
+      <button 
+      type="button" 
+      class="btn btn-outline-dark"
+      [disabled]="myForm.invalid"
+      (click)="closeModal(myForm, modal.dismiss)">Log In</button>
+    </div>
+</ng-template>
+
+<ng-template #info let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">User Info</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <!--Username-->
+        <div class="mb-3">Username: {{user?.username}}</div>
+        <!--Email-->
+        <div class="mb-3">Email: {{user?.email}}</div>
+        <!--Nickname-->
+        <div class="mb-3">Nickname: {{user?.nickname}}</div>
+        <!--First Name-->
+        <div class="mb-3">First Name: {{user?.first_name}}</div>
+    </div>
+    <div class="modal-footer">
+      <button 
+      type="button" 
+      class="btn btn-outline-dark"
+      [disabled]="myForm.invalid"
+      (click)="modal.dismiss('Close')">Close</button>
+    </div>
+</ng-template>

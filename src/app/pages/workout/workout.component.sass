@@ -26,13 +26,17 @@
     +stroke(1px, $brand-black)
 
     font-size: 4rem
-    span
-        color: $brand-white
-    .active
-        color: $brand-light
-    .unactive
+    &.active
         margin: auto
-        color: $brand-mild
+        font-size: 6rem
+        +stroke(2px, $brand-black)
+    span
+        color: $brand-dark
+        &.active
+            color: $brand-light
+        &.unactive
+            margin: auto
+            color: $brand-mild
 
 //ITEM LIST
 div
@@ -120,7 +124,11 @@ ul
             border: 1px solid $brand-dark
             color: $brand-dark
             background-color: $brand-mild
+            margin: auto 10px
             border-radius: 50%
             width: 28px
             height: 28px
+    .done-btn
+        margin: 5px
+
 

@@ -2,14 +2,28 @@
     <!--Title-->
     <h1 
     class="page-title"
-    *ngIf="status!==EXERCISE_STATUS">Choose a 
+    [ngClass]="status===INITIAL_STATUS ? 'active' : ''"
+    *ngIf="status!==EXERCISE_STATUS">
+    <span
+    class="active"
+    *ngIf="status===CONFIRM_STATUS">
+        Workout Donzo Bozo
+    </span>
+    <span
+    *ngIf = "status===MOVEMENT_PATTERN_STATUS || status===WORKOUT_STATUS || status===INITIAL_STATUS">
+        Choose a 
+    </span>
     <span 
     *ngIf="status===WORKOUT_STATUS || status===INITIAL_STATUS"
     [ngClass]="title_class" 
-    (click) = "onTitleClick()" >Workout</span>
+    (click) = "onTitleClick()" >
+        Workout
+    </span>
     <span 
     *ngIf="status===MOVEMENT_PATTERN_STATUS"
-    class="active" >Movement Pattern</span>
+    class="active" >
+        Movement Pattern
+    </span>
     </h1>
 
     <!--Options (Maybe seprate component)-->
@@ -60,7 +74,7 @@
                 *ngIf="current_item===item?._id">
                     <li 
                     *ngFor="let map of item?.variations"
-                    (click)="onExerciseClick(item._id)">{{map.key}}: {{map.value.name}}</li>
+                    (click)="onExerciseClick(map)">{{map.key}}: {{map.value.name}}</li>
                 </ul>
 
             </li>
@@ -70,17 +84,32 @@
     <!--Exercise Entry Form-->
     <div 
     class="exercise-entry"
-    *ngIf="status===EXERCISE_STATUS">
-        <h1 class="entry-heading">Level Three</h1>
-        <h3 class="entry-heading">Bar Dips</h3>
+    *ngIf="status===EXERCISE_STATUS && current_exercise">
+        <h1 class="entry-heading">{{current_exercise.key}}</h1>
+        <h3 class="entry-heading">{{current_exercise.name}}</h3>
         <form  [formGroup]="form" (ngSubmit)="addSet($event)">
             <div class="rep-count-container"><h1 class="rep-count">{{rep_count}}</h1></div>
             <h3 class="rep-count-txt">Out of <span class="rep-goal">70</span></h3>
+            
             <div class="rep-input">
                 <button class="add-btn">＋</button>
                 <input formControlName="reps" type="number" name="reps" />
             </div>
         </form>
+        <button 
+            class="done-btn"
+            *ngIf="rep_count >= MIN_REPS"
+            (click)="completeMovementPattern()">Done</button>
+    </div>
+
+    <!--Check Over Details-->
+    <div
+    *ngIf="status===CONFIRM_STATUS">
+        <!--workoutEntryObj-->
+        <div class="info-display"></div>
+        <button
+        class="confirm-btn"
+        (click)="completeWorkout()">Submit</button>
     </div>
 
 </div>

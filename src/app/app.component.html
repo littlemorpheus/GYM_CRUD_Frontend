@@ -1,37 +1,9 @@
-<ng-template class="user-modal" #content let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Login</h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.close('Exit')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-
-    <div class="modal-body">
-        <form>
-            <div class="mb-3">
-                <div class="input-group">
-                    <input id="dateOfBirth" class="form-control" placeholder="Username" name="un" type="text">
-                </div>
-                <span class="err-msg">Username Incorrect</span>
-            </div>
-            <div class="mb-3">
-                <div class="input-group">
-                    <input id="password" class="form-control" placeholder="Password" name="pw" type="password">
-                </div>
-                <span class="err-msg">Password Incorrect</span>
-            </div>
-        </form>
-    </div>
-
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Log In')">Log In</button>
-    </div>
-</ng-template>
+<user-modal #user></user-modal>
 
 <div class="content-wrapper">
     <router-outlet></router-outlet>
 </div>
 
 <div class="nav-wrapper">
-    <main-nav (userOpen) = "open(content)"></main-nav>
+    <main-nav (userOpen) = "user.modal()"></main-nav>
 </div>
