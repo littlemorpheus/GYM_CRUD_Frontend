@@ -12,6 +12,7 @@ export class UserModalComponent implements OnInit {
 
   @ViewChild('login') private loginRef: TemplateRef<any>;
   @ViewChild('info') private infoRef: TemplateRef<any>;
+  @ViewChild('log_off') private logOffRef: TemplateRef<any>;
 
   myForm!: FormGroup;
   user: any;
@@ -65,7 +66,8 @@ export class UserModalComponent implements OnInit {
     });
   }
 
-  closeModal(formData: FormGroup, close: Function) {
+  /*    Close Modal     */
+  saveLogin(formData: FormGroup, close: Function) {
     console.log(formData)
     this.client.logIn(formData.value).subscribe(res => {
       if ('error' in res) {
@@ -78,12 +80,21 @@ export class UserModalComponent implements OnInit {
           /* Store Token */
           localStorage.setItem("SESSIONID", res['token'])
           close('Save')
-          //refresh
+          window.location.reload();//refresh
         }
       }
       console.log(res);
     })
     
+  }
+  logOffCheck(close: Function) {
+    close('Close')
+    this._openModal(this.logOffRef)
+  }
+  logOut(close: Function) {
+    close('Log Off')
+    localStorage.removeItem("SESSIONID")
+    window.location.reload();
   }
 
   private getDismissReason(reason: any): string {

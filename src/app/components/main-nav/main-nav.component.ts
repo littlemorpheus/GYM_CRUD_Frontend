@@ -28,6 +28,7 @@ export class MainNavComponent implements OnInit {
         this.user = data
         console.log(data)
         if('nickname' in data) this.name = data['nickname']
+        console.log(this.name)
         console.log(data)
       }
     )

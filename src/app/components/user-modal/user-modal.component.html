@@ -43,7 +43,7 @@
       type="button" 
       class="btn btn-outline-dark"
       [disabled]="myForm.invalid"
-      (click)="closeModal(myForm, modal.dismiss)">Log In</button>
+      (click)="saveLogin(myForm, modal.dismiss)">Log In</button>
     </div>
 </ng-template>
 
@@ -68,5 +68,33 @@
       class="btn btn-outline-dark"
       [disabled]="myForm.invalid"
       (click)="modal.dismiss('Close')">Close</button>
+
+      <button 
+      type="button" 
+      ngbAutofocus 
+      class="btn btn-danger"
+      (click)="logOffCheck(modal.dismiss)">Log Off</button>
+    </div>
+</ng-template>
+
+<ng-template #log_off let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">User Info</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <p>Are you sure you wanna <b>log off</b></p>
+    </div>
+    <div class="modal-footer">
+      <button 
+      type="button" 
+      class="btn btn-outline-dark"
+      (click)="modal.dismiss('Close')">Close</button>
+
+      <button 
+      type="button" 
+      ngbAutofocus 
+      class="btn btn-danger"
+      (click)="logOut(modal.dismiss)">Yes</button>
     </div>
 </ng-template>

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ItemPostService } from 'services/item-post.service';
 import { ItemRetrievalService } from 'services/item-retrieval.service';
 import { WorkoutEntry, doneMovementPattern, doneSets } from 'services/workout-entry';
+import { ClientService } from 'services/client.service';
 
 @Component({
   selector: 'app-workout',
@@ -12,20 +13,38 @@ import { WorkoutEntry, doneMovementPattern, doneSets } from 'services/workout-en
 export class WorkoutComponent implements OnInit {
 
   /*        CONST        */
-  INITIAL_STATUS = 3;
-  WORKOUT_STATUS = 0;
-  MOVEMENT_PATTERN_STATUS = 1;
-  EXERCISE_STATUS = 2;
-  CONFIRM_STATUS = 5;
+  INITIAL_STATUS = 'XSFJKBDS';
+  WORKOUT_STATUS = 'SDJHGDJBHX';
+  MOVEMENT_PATTERN_STATUS = 'ZSJHVDXJHZCV';
+  EXERCISE_STATUS = 'DSJZVDHJSC';
+  CONFIRM_STATUS = 'JHZVDJAH';
 
   /*        VARIABLES        */
     //Top Level
   level: string = "workout";
-  status: number = this.INITIAL_STATUS;
+  //status: number = this.INITIAL_STATUS;
   title_class: string = "unactive";
 
-    //Item Listings
-  itemList: any[] = [];
+  //Item Listings
+
+  //REVIEW VARIABLES AND SEE IF CAN REDUCE
+  /*
+  status: Object = {
+    current item: string
+    current_exercise: any;
+
+    workout: any;
+    workout_id: string;
+    movement_pattern_id;
+
+    rep_count: number;
+    setCount: number;
+  }
+  workoutEntryObj: Object = {
+
+  }
+  setList: doneSets[] = [{}];
+  */
   current_item: string = '';
   current_exercise: any;
   workout: any;
@@ -50,10 +69,31 @@ export class WorkoutComponent implements OnInit {
   constructor(
     private retrieval: ItemRetrievalService,
     private post: ItemPostService,
+    private client: ClientService,
     private fb: FormBuilder
   ) { }
 
   ngOnInit(): void {
+    if (!this.isValid() || !this.client.isLoggedIn() || true) {
+      //User isnt logged in or Stored Data isnt valid
+      
+      //Set up page
+      this.setStatus(this.INITIAL_STATUS)
+
+      //1.Load in all workouts
+      this.retrieval.getAllWorkout('name').subscribe(
+        val=> {
+          this.setItemList(val) 
+          console.log(val)
+        }
+      )
+      //workoutObj - Submitted Workout Object (List of Movement Patterns)
+      //workout - Workout Object
+      //listItem - list of either workouts or movement patterns
+      //setList - list of completed sets
+      //setCount - set index
+      //repCount - no of reps currently done
+    }
     /**
      * When stuff is RECORDed and Locked In should save something locally
      * 
@@ -99,14 +139,6 @@ export class WorkoutComponent implements OnInit {
      * 
      * REFRESH
      */
-
-    //1.Load in all workouts
-    this.retrieval.getAllWorkout('name').subscribe(
-      val=> {
-        this.itemList = val 
-        console.log(val)
-      }
-    )
   }
 
   /*        Top Level        */
@@ -115,7 +147,7 @@ export class WorkoutComponent implements OnInit {
 
     if (this.status!==this.INITIAL_STATUS) return;
     this.title_class = "active"
-    this.status = this.WORKOUT_STATUS
+    this.setStatus(this.WORKOUT_STATUS)
   }
 
   /*        Item Listings        */
@@ -156,15 +188,15 @@ export class WorkoutComponent implements OnInit {
 
         this.workoutEntryObj.workout_plan = this.current_item;
         this.current_item = '';
-        this.itemList = val?.sections;
-        this.status = this.MOVEMENT_PATTERN_STATUS;
+        this.setItemList(val?.sections);
+        this.setStatus(this.MOVEMENT_PATTERN_STATUS);
       }
     )
   }
   _lockInMovementPattern() {
     //because doneMovementPattern is an array best to do a push all in one
     this.setCount = 0;
-    this.status = this.EXERCISE_STATUS
+    this.setStatus(this.EXERCISE_STATUS)
   }
 
   /*            Choosing Movement Pattern            */
@@ -198,21 +230,51 @@ export class WorkoutComponent implements OnInit {
 
     /* Unlock Movement Pattern */
     this.rep_count = 0;
-    this.status = this.MOVEMENT_PATTERN_STATUS
+    this.setStatus(this.MOVEMENT_PATTERN_STATUS)
 
     /* Remove from List of Movement Patterns on Wokrout Object */
     console.log(this.current_item)
     console.log(this.itemList)
     var result = this.itemList.filter(item => item._id != this.current_item)
-    this.itemList = result
+    this.setItemList(result)
 
     /* Check to see if done all Movement Pattrens */
-    if (this.itemList.length < 1) this.status = this.CONFIRM_STATUS;
+    if (this.itemList.length < 1) this.setStatus(this.CONFIRM_STATUS);
   }
   completeWorkout() {
     /* CONFIRM_STATUS */
     this.post.addEntry(this.workoutEntryObj).subscribe(console.log)
-    this.status = this.INITIAL_STATUS
+    this.setStatus(this.INITIAL_STATUS)
     console.log(this.workoutEntryObj);
+  }
+
+  get status() {
+    return localStorage.getItem('status')
+  }
+  setStatus(status: any) {
+    localStorage.setItem('status', status.toString())
+  }
+
+  get itemList(): any[] {
+    let list = localStorage.getItem('thelist') || ''
+    return JSON.parse(list)
+  }
+  setItemList(list: any[]) {
+    let str = JSON.stringify(list);
+    localStorage.setItem('thelist', str)
+  }
+
+  isValid() {
+    let list = [
+      this.INITIAL_STATUS,
+      this.WORKOUT_STATUS,
+      this.MOVEMENT_PATTERN_STATUS,
+      this.EXERCISE_STATUS,
+      this.CONFIRM_STATUS
+    ]
+    for (var i in list) {
+      if (this.status === list[i]) return true;
+    }
+    return false
   }
 }
