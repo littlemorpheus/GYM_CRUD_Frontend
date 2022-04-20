@@ -13,7 +13,7 @@ export class ItemRetrievalService {
     private http: HttpClient
   ) { }
 
-  private _apiURL = `http://${window.location.hostname}:4242/api/`
+  private _apiURL = `http://${window.location.hostname}:${window.location.port}/api/`
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type':  'application/json',

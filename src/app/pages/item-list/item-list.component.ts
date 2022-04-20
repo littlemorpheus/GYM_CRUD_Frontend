@@ -19,7 +19,7 @@ export class ItemListComponent implements OnInit {
     ) {
     route.params.subscribe(val => {
       this._ITEM = val;
-      this.itemList = ['ITEM A', 'ITEM B', 'ITEM C', 'ITEM D', 'ITEM E'];
+      this.itemList = [];
       reterieval.getAll(this._ITEM.item, 'name')?.subscribe(val => {
         this.itemList = val
       })
